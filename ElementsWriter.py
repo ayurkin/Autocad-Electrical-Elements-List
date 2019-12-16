@@ -3,7 +3,7 @@ class ElementsListWriter(object):
         self.groups_witer = groups_writer()
 
     def get_sorted(self, elements):
-        pass
+        s = sorted(elements, key=lambda element: element['tag'])
 
     def write_elements(self, elements):
         elements = self.get_sorted(elements)

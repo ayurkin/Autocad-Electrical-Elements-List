@@ -1,0 +1,261 @@
+[
+    {
+        "catalog_number": "2.8", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC16-10", 
+        "tag": "QF1", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.9", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 3PD16-10", 
+        "tag": "QF6", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.10", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 3PC16-10", 
+        "tag": "QF7", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.11", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 3PD20-10", 
+        "tag": "QF8", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.12", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 3PD32-10", 
+        "tag": "QF2", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.5", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC10-10", 
+        "tag": "QF4", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.5", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC10-10", 
+        "tag": "QF3", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.5", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC10-10", 
+        "tag": "QF5", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT1", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.3", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 WDU 16", 
+        "tag": "XT2", 
+        "producer": "\"Weidmuller\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT3", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT4", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.3", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 WDU 16", 
+        "tag": "XT5", 
+        "producer": "\"Weidmuller\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT6", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.1", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 280-901 2.5", 
+        "tag": "XT8", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.1", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 280-901 2.5", 
+        "tag": "XT9", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.1", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 280-901 2.5", 
+        "tag": "XT10", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT11", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "54.1", 
+        "description": "\u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c 220/24 DR-120-24", 
+        "tag": "UZ1", 
+        "producer": "\"MeanWell\"", 
+        "family": "UZ"
+    }, 
+    {
+        "catalog_number": "54.2", 
+        "description": "\u041f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c 220/24 DRP-240-24", 
+        "tag": "UZ2", 
+        "producer": "\"MeanWell\"", 
+        "family": "UZ"
+    }, 
+    {
+        "catalog_number": "4.4", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 WPE 16", 
+        "tag": "XT7", 
+        "producer": "\"Weidmuller\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "2.6", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC16-10DC", 
+        "tag": "QF9", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "2.6", 
+        "description": "\u0412\u044b\u043a\u043b\u044e\u0447\u0430\u0442\u0435\u043b\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 Optidin BM-63 2PC16-10DC", 
+        "tag": "QF10", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "QQ"
+    }, 
+    {
+        "catalog_number": "18.1", 
+        "description": "\u041a\u043e\u043c\u043c\u0443\u0442\u0430\u0442\u043e\u0440 L110-F2G", 
+        "tag": "A1", 
+        "producer": "\"WESTERMO\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "21.1", 
+        "description": "\u041f\u041b\u041a160-24.\u0410-\u041c", 
+        "tag": "A3", 
+        "producer": "\"\u041e\u0412\u0415\u041d\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "21.5", 
+        "description": "\u041c\u043e\u0434\u0443\u043b\u044c \u0430\u043d\u0430\u043b\u043e\u0433\u043e\u0432\u043e\u0433\u043e \u0432\u0432\u043e\u0434\u0430 \u041c\u0412210-101", 
+        "tag": "A4", 
+        "producer": "\"\u041e\u0412\u0415\u041d\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "21.6", 
+        "description": "\u041c\u043e\u0434\u0443\u043b\u044c \u0430\u043d\u0430\u043b\u043e\u0433\u043e\u0432\u043e\u0433\u043e \u0432\u044b\u0432\u043e\u0434\u0430 \u041c\u0423210-501", 
+        "tag": "A5", 
+        "producer": "\"\u041e\u0412\u0415\u041d\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "21.5", 
+        "description": "\u041c\u043e\u0434\u0443\u043b\u044c \u0430\u043d\u0430\u043b\u043e\u0433\u043e\u0432\u043e\u0433\u043e \u0432\u0432\u043e\u0434\u0430 \u041c\u0412210-101", 
+        "tag": "A6", 
+        "producer": "\"\u041e\u0412\u0415\u041d\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "3.3", 
+        "description": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0440 \u041f\u041c\u041b-2165\u0414\u041c-25\u0410-24DC-\u0423\u0425\u041b4-\u0411-\u041a\u042d\u0410\u0417", 
+        "tag": "KM1", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "KM"
+    }, 
+    {
+        "catalog_number": "3.3", 
+        "description": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0440 \u041f\u041c\u041b-2165\u0414\u041c-25\u0410-24DC-\u0423\u0425\u041b4-\u0411-\u041a\u042d\u0410\u0417", 
+        "tag": "KM2", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "KM"
+    }, 
+    {
+        "catalog_number": "3.3", 
+        "description": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0440 \u041f\u041c\u041b-2165\u0414\u041c-25\u0410-24DC-\u0423\u0425\u041b4-\u0411-\u041a\u042d\u0410\u0417", 
+        "tag": "KM3", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "KM"
+    }, 
+    {
+        "catalog_number": "3.2", 
+        "description": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043e\u0440 \u041f\u041c\u041b-1165\u0414\u041c-16\u0410-24DC-\u0423\u0425\u041b4-\u0411-\u041a\u042d\u0410\u0417", 
+        "tag": "KM4", 
+        "producer": "\"\u041a\u042d\u0410\u0417\"", 
+        "family": "KM"
+    }, 
+    {
+        "catalog_number": "1.1", 
+        "description": "\u0420\u0435\u043b\u0435 CAD32 BD", 
+        "tag": "K1", 
+        "producer": "\"Schnider Electric\"", 
+        "family": "KK"
+    }, 
+    {
+        "catalog_number": "21.4", 
+        "description": "\u041f\u0430\u043d\u0435\u043b\u044c \u043e\u043f\u0435\u0440\u0430\u0442\u043e\u0440\u0430 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u043b\u0435\u0440\u043d\u0430\u044f \u0421\u041f\u041a110", 
+        "tag": "A2", 
+        "producer": "\"\u041e\u0412\u0415\u041d\"", 
+        "family": "AA"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT12", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT13", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }, 
+    {
+        "catalog_number": "4.2", 
+        "description": "\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5", 
+        "tag": "XT14", 
+        "producer": "\"WAGO\"", 
+        "family": "XT"
+    }
+]
