@@ -1,7 +1,8 @@
+import json
 from AutocadConnection import get_autocad_com_obj
 from ElementsGetter import ElementsGetter
 from CatalogInfoGetter import CatalogInfoGetter, CatalogInfoGetterFromSQLServer
-import json
+from ElementsWriter import ElementsListWriter
 
 SQL_SERVER_CONSTANT_SERVER = "TESTPC"
 SQL_SERVER_CONSTANT_DATABASE = "AutocadNIO1"
@@ -26,35 +27,21 @@ with open("data_file.json", "r") as f:
 for element in elements:
     print element
 
+a = ElementsListWriter()
+elements_sorted = a.get_sorted_by_tag(elements)
+print "start"
+for element in elements_sorted:
+    print element
 
-def get_literals_from_tag(s):
-    return "".join([d for d in s if not d.isdigit()])
-
-
-def get_digits_from_tag(s):
-    return "".join([d for d in s if d.isdigit()])
-
-
-def get_sorted(elements):
-    s = sorted(elements, key=lambda elem: elem['tag'])
-    groups = [[s.pop(0)]]
-    for element in s:
-        prev_lit = get_literals_from_tag(groups[-1][0]['tag'])
-        if prev_lit == get_literals_from_tag(element['tag']):
-            groups[-1].append(element)
-        else:
-            groups.append([element])
-
-    # for group in groups:
-    #     print "group start"
-    #     print group
-    #     print "group end"
-
-    groups = [sorted(group, key=lambda elem: int(get_digits_from_tag(elem['tag']))) for group in groups]
-
-    return sum(groups, [])
-
-
-y = get_sorted(elements)
-
+groups = a.get_groups(elements_sorted)
 print "end"
+
+
+
+
+
+
+
+
+
+
