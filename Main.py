@@ -9,8 +9,8 @@ SQL_SERVER_CONSTANT_DATABASE = "AutocadNIO1"
 SQL_SERVER_CONSTANT_UID = "sa"
 SQL_SERVER_CONSTANT_PASSWORD = "niiset"
 
-app = get_autocad_com_obj()
-modelspace = app.ActiveDocument.ModelSpace
+autocad_app = get_autocad_com_obj()
+modelspace = autocad_app.ActiveDocument.ModelSpace
 
 # sql_info_getter = CatalogInfoGetterFromSQLServer(SQL_SERVER_CONSTANT_SERVER, SQL_SERVER_CONSTANT_DATABASE,
 #                                                  SQL_SERVER_CONSTANT_UID, SQL_SERVER_CONSTANT_PASSWORD)
@@ -27,14 +27,18 @@ with open("data_file.json", "r") as f:
 for element in elements:
     print element
 
-a = ElementsListWriter()
-elements_sorted = a.get_sorted_by_tag(elements)
-print "start"
-for element in elements_sorted:
-    print element
+writer = ElementsListWriter()
+# elements_sorted = writer.get_sorted_by_tag(elements)
 
-groups = a.get_groups(elements_sorted)
-print "end"
+
+# print "start"
+# for element in elements_sorted:
+#     print element
+#
+# groups = a.get_groups(elements_sorted)
+# print "end"
+
+writer.write_elements(elements, autocad_app)
 
 
 
