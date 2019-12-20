@@ -20,17 +20,30 @@ class GroupsWriterToAutocadPage(object):
         project_path = self.autocad_app.Documents[0].Path
         save_line = r"{project_path}\{file_name}".format(project_path=project_path, file_name=self.file_name)
         self.__file.SaveAs(save_line)
-        self.__file.PostCommand("""(c:ace_add_dwg_to_project nil (list "" "" "" 1))\n""")
+        # Execute command to add created file to project
+        self.__file.SendCommand("""(c:ace_wdp_reread)\n""")
+        self.__file.SendCommand("""(c:ace_add_dwg_to_project nil (list "" "" "" 1))\n""")
         # file_path = self.__file.FullName
         self.__file.Close()
         return None
 
     def write_groups(self, groups):
+        groups = groups
         autocad_app = get_autocad_com_obj()
         current_file_obj = self.__file
         current_list_modelspace = self.__file.Modelspace
+        table = None
         for i in range(current_list_modelspace.Count):
-            print i, current_list_modelspace[i].EntityName
+            if current_list_modelspace[i].EntityName == "AcDbTable":
+                table = current_list_modelspace[i]
+
+        table.SetCellValue(0, 0, "ABCDFJ55")
+        for i in range(29):
+            table.SetCellValue(i, 1, " ABCDFJ5513ABCDFJ5513ABCDFJ5513ABCDFJ5513ABCDFJ5513ABC")
+            table.SetCellValue(i, 2, i)
+        # table.SetCellValue(0, 1, u'\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5')
+
+
         return []
 
 
@@ -112,3 +125,40 @@ def get_literals_from_tag(s):
 
 def get_digits_from_tag(s):
     return int("".join([d for d in s if d.isdigit()]))
+
+
+a = [{'description': "Kontaktor silovoi trehpolusniu 32A", 'tag': 'KM1', 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'},
+ {'description': "Kontaktor silovoi trehpolusniu 32A", 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'},
+ {'description': "Kontaktor silovoi trehpolusniu 32A", 'tag': 'KM3', 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'}]
+
+if len(a) == 3:
+    fields = [{
+        "tag": a[0]["tag"] + "-" + a[-1]["tag"],
+        "desc": a[0]["description"] + " " + a[0]["producer"]
+
+    }]
+
+
+
+print fields
+
+str_big = "Kontaktor silovoi trehpolusniu ofigennii big kosyakov i electromagnithih pomegh 32A"
+print len(str_big)
+print  str_big
+
+
+
+while fields[-1]["desc"] > 30:
+
+    fields.append({
+        "tag": "",
+        "desc": fields[-1]["desc"]
+    })
+
+
+
+
+
+    lst = str_big.split()
+    str_big_ost = lst.pop(-1)
+    str_big = " ".join(lst)
