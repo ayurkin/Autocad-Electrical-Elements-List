@@ -81,4 +81,3 @@ class ElementsGetter(object):
         if self.__elements is None:
             self.__elements = self.load_elements()
         return self.__elements
-

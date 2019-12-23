@@ -1,6 +1,9 @@
 import clr
+
 clr.AddReference("System.Data")
 from System.Data import SqlClient, DataSet
+
+
 # from System.Data.OleDb import OleDbConnection, OleDbDataAdapter
 
 
@@ -51,9 +54,9 @@ class CatalogInfoGetterFromSQLServer(object):
     def connect_to_database(self):
         self.connection = SqlClient.SqlConnection(
             r"server={server};database={database};uid={uid};password={password}".format(server=self.server,
-                                                                                       database=self.database,
-                                                                                       uid=self.uid,
-                                                                                       password=self.password))
+                                                                                        database=self.database,
+                                                                                        uid=self.uid,
+                                                                                        password=self.password))
 
     def get_queries(self, elements):
         queries = {}

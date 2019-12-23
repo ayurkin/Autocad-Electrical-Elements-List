@@ -12,32 +12,22 @@ SQL_SERVER_CONSTANT_PASSWORD = "niiset"
 autocad_app = get_autocad_com_obj()
 modelspace = autocad_app.ActiveDocument.ModelSpace
 
-# sql_info_getter = CatalogInfoGetterFromSQLServer(SQL_SERVER_CONSTANT_SERVER, SQL_SERVER_CONSTANT_DATABASE,
-#                                                  SQL_SERVER_CONSTANT_UID, SQL_SERVER_CONSTANT_PASSWORD)
+sql_info_getter = CatalogInfoGetterFromSQLServer(SQL_SERVER_CONSTANT_SERVER, SQL_SERVER_CONSTANT_DATABASE,
+                                                 SQL_SERVER_CONSTANT_UID, SQL_SERVER_CONSTANT_PASSWORD)
 
-# elements_without_desc = ElementsGetter(modelspace).elements
-# elements = CatalogInfoGetter(elements_without_desc, sql_info_getter).elements
+elements_without_desc = ElementsGetter(modelspace).elements
+elements = CatalogInfoGetter(elements_without_desc, sql_info_getter).elements
 
 # with open("data_file.json", "w") as f:
 #     json.dump(elements, f, indent=4)
 
-with open("data_file.json", "r") as f:
-    elements = json.load(f)
+# with open("data_file.json", "r") as f:
+#     elements = json.load(f)
 
-for element in elements:
-    print element
+# for element in elements:
+#     print element
 
 writer = ElementsListWriter()
-# elements_sorted = writer.get_sorted_by_tag(elements)
-
-
-# print "start"
-# for element in elements_sorted:
-#     print element
-#
-# groups = a.get_groups(elements_sorted)
-# print "end"
-
 writer.write_elements(elements, autocad_app)
 
 

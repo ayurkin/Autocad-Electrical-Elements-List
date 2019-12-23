@@ -1,8 +1,5 @@
-from AutocadConnection import get_autocad_com_obj
+from time import sleep
 
-
-#add file to project
-#app.ActiveDocument.PostCommand("""(c:ace_add_dwg_to_project nil (list "" "" "" 1))\n""")
 
 class GroupsWriterToAutocadPage(object):
     def __init__(self, file_name, page_lines_count, autocad_app, template_name):
@@ -23,28 +20,38 @@ class GroupsWriterToAutocadPage(object):
         # Execute command to add created file to project
         self.__file.SendCommand("""(c:ace_wdp_reread)\n""")
         self.__file.SendCommand("""(c:ace_add_dwg_to_project nil (list "" "" "" 1))\n""")
-        # file_path = self.__file.FullName
+        file_path = self.__file.FullName
         self.__file.Close()
-        return None
+        return file_path
 
     def write_groups(self, groups):
-        groups = groups
-        autocad_app = get_autocad_com_obj()
-        current_file_obj = self.__file
+        left_lines_count = self.page_lines_count
+        sleep(1)  # delay for 1 s to complete autocad file create
         current_list_modelspace = self.__file.Modelspace
+
         table = None
         for i in range(current_list_modelspace.Count):
             if current_list_modelspace[i].EntityName == "AcDbTable":
                 table = current_list_modelspace[i]
 
-        table.SetCellValue(0, 0, "ABCDFJ55")
-        for i in range(29):
-            table.SetCellValue(i, 1, " ABCDFJ5513ABCDFJ5513ABCDFJ5513ABCDFJ5513ABCDFJ5513ABC")
-            table.SetCellValue(i, 2, i)
-        # table.SetCellValue(0, 1, u'\u041a\u043b\u0435\u043c\u043c\u0430 279-901 1.5')
+        while groups:
+            group = groups.pop(0)
+            lines = group.get_lines()
+            if len(lines) >= left_lines_count:
+                self.__left_groups = groups
+                break
+            line_number = self.page_lines_count - left_lines_count
 
+            for line in lines:
+                table.SetCellValue(line_number, 0, line["tag"])
+                table.SetCellValue(line_number, 1, line["desc"])
+                table.SetCellValue(line_number, 2, line["count"])
+                line_number += 1
 
-        return []
+            left_lines_count -= len(lines)
+
+    def get_left_groups(self):
+        return self.__left_groups
 
 
 class GroupsWriterToAutocadFiles(object):
@@ -52,19 +59,36 @@ class GroupsWriterToAutocadFiles(object):
     FIRST_PAGE_TEMPLATE = "a4-1-PE_v2.dwt"
     OTHER_PAGE_TEMPLATE = "a4-2-PE_v2.dwt"
     FORMAT = "dwg"
-    FIRST_PAGE_LINES_COUNT = 10
-    OTHER_PAGE_LINES_COUNT = 10
+    FIRST_PAGE_LINES_COUNT = 29
+    OTHER_PAGE_LINES_COUNT = 322
 
     def __init__(self):
         self.elements_list_files = []
 
     def write_groups(self, groups, autocad_app):
         first_page_file_name = "{name}_1.{ext}".format(name=self.ELEMENTS_LIST_PAGE_NAME, ext=self.FORMAT)
-        first_page_writer = GroupsWriterToAutocadPage(first_page_file_name, self.OTHER_PAGE_LINES_COUNT, autocad_app,
+        first_page_writer = GroupsWriterToAutocadPage(first_page_file_name, self.FIRST_PAGE_LINES_COUNT, autocad_app,
                                                       self.FIRST_PAGE_TEMPLATE)
         first_page_writer.write_groups(groups)
         file_path = first_page_writer.save_file()
-        return []
+        self.elements_list_files.append(file_path)
+        left_groups = first_page_writer.get_left_groups()
+        page_number = 2
+
+        while left_groups:
+            writer_page_file_name = "{name}_{page_number}.{ext}".format(name=self.ELEMENTS_LIST_PAGE_NAME,
+                                                                        page_number=page_number,
+                                                                        ext=self.FORMAT)
+            writer = GroupsWriterToAutocadPage(writer_page_file_name,
+                                               self.OTHER_PAGE_LINES_COUNT, autocad_app,
+                                               self.OTHER_PAGE_TEMPLATE)
+            page_number += 1
+            writer.write_groups(left_groups)
+            left_groups = writer.get_left_groups()
+            file_path = writer.save_file()
+            self.elements_list_files.append(file_path)
+
+        return self.elements_list_files
 
 
 class ElementsListWriter(object):
@@ -97,10 +121,11 @@ class ElementsListWriter(object):
 
     def write_elements(self, elements, autocad_app):
         elements_sorted = self.get_sorted_by_tag(elements)  # Sort elements by tag
-        groups = self.get_groups(elements_sorted) # Create groups by the same catalog number
+        groups = self.get_groups(elements_sorted)  # Create groups by the same catalog number
         self.elements_list_files = self.groups_writer.write_groups(groups, autocad_app)
-
-
+        print "Created files:"
+        for file_name in self.elements_list_files:
+            print file_name
 
 
 class ElementsGroup(object):
@@ -118,6 +143,37 @@ class ElementsGroup(object):
     def add_element(self, element):
         self.elements.append(element)
 
+    def word_iterator(self, words_list):
+        for word in words_list:
+            yield word
+
+    def get_lines(self):
+        fields = [{
+            "tag": "",
+            "desc": "",
+            "count": ""
+        }]
+        if len(self.elements) == 1:
+            fields[0]["tag"] = self.elements[0]["tag"]
+            fields[0]["count"] = str(1)
+        elif len(self.elements) == 2:
+            fields[0]["tag"] = self.elements[0]["tag"] + ", " + self.elements[1]["tag"]
+            fields[0]["count"] = str(2)
+        elif len(self.elements) >= 3:
+            fields[0]["tag"] = self.elements[0]["tag"] + "-" + self.elements[-1]["tag"]
+            fields[0]["count"] = str(len(self.elements))
+
+        desc = self.elements[0]["description"] + " " + self.elements[0]["producer"]
+        desc_list = desc.split()
+
+        for word in self.word_iterator(desc_list):
+            if len(fields[-1]["desc"] + " " + word) > 53:
+                fields.append({"tag": "", "desc": " " + word, "count": ""})
+            else:
+                fields[-1]["desc"] = fields[-1]["desc"] + " " + word
+
+        return fields
+
 
 def get_literals_from_tag(s):
     return "".join([d for d in s if not d.isdigit()])
@@ -125,40 +181,3 @@ def get_literals_from_tag(s):
 
 def get_digits_from_tag(s):
     return int("".join([d for d in s if d.isdigit()]))
-
-
-a = [{'description': "Kontaktor silovoi trehpolusniu 32A", 'tag': 'KM1', 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'},
- {'description': "Kontaktor silovoi trehpolusniu 32A", 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'},
- {'description': "Kontaktor silovoi trehpolusniu 32A", 'tag': 'KM3', 'producer': "KEAZ", 'family': 'KM', 'catalog_number': '3.3'}]
-
-if len(a) == 3:
-    fields = [{
-        "tag": a[0]["tag"] + "-" + a[-1]["tag"],
-        "desc": a[0]["description"] + " " + a[0]["producer"]
-
-    }]
-
-
-
-print fields
-
-str_big = "Kontaktor silovoi trehpolusniu ofigennii big kosyakov i electromagnithih pomegh 32A"
-print len(str_big)
-print  str_big
-
-
-
-while fields[-1]["desc"] > 30:
-
-    fields.append({
-        "tag": "",
-        "desc": fields[-1]["desc"]
-    })
-
-
-
-
-
-    lst = str_big.split()
-    str_big_ost = lst.pop(-1)
-    str_big = " ".join(lst)
