@@ -1,20 +1,16 @@
 import System
-import sys
+from Constants import AUTOCADS
 
 
 def get_autocad_com_obj():
-    try:
-        print "Try 'Autocad Electrical 2019'"
-        autocad_com_obj = System.Runtime.InteropServices.Marshal.GetActiveObject(
-            "Autocad.Application.23")  # Autocad 2019
-    except Exception:
-        print "'Autocad Electrical 2019' is not running"
+    for autocad_name, autocad_connect_line in AUTOCADS.items():
         try:
-            print "Try 'Autocad.Application.22'"
-            autocad_com_obj = System.Runtime.InteropServices.Marshal.GetActiveObject("Autocad.Application")
-        except Exception:
-            print "'Autocad.Application.22' is not running"
-            sys.exit()
-    print "Autocad is running"
-    return autocad_com_obj
-
+            autocad_com_obj = System.Runtime.InteropServices.Marshal.GetActiveObject(autocad_connect_line)
+        except EnvironmentError:
+            pass
+        else:
+            print autocad_name, "is running"
+            return autocad_com_obj
+    else:
+        print "AutoCAD is not running"
+        return None

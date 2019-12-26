@@ -1,5 +1,5 @@
 from time import sleep
-
+from Constants import TABLE_ENTITY_NAME, TABLE_DESCRIPTION_LETTER_COUNT
 
 class GroupsWriterToAutocadPage(object):
     def __init__(self, file_name, page_lines_count, autocad_app, template_name):
@@ -31,7 +31,7 @@ class GroupsWriterToAutocadPage(object):
 
         table = None
         for i in range(current_list_modelspace.Count):
-            if current_list_modelspace[i].EntityName == "AcDbTable":
+            if current_list_modelspace[i].EntityName == TABLE_ENTITY_NAME:
                 table = current_list_modelspace[i]
 
         while groups:
@@ -66,9 +66,16 @@ class GroupsWriterToAutocadFiles(object):
         self.elements_list_files = []
 
     def write_groups(self, groups, autocad_app):
-        first_page_file_name = "{name}_1.{ext}".format(name=self.ELEMENTS_LIST_PAGE_NAME, ext=self.FORMAT)
-        first_page_writer = GroupsWriterToAutocadPage(first_page_file_name, self.FIRST_PAGE_LINES_COUNT, autocad_app,
-                                                      self.FIRST_PAGE_TEMPLATE)
+        first_page_file_name = "{name}_1.{ext}".format(
+            name=self.ELEMENTS_LIST_PAGE_NAME,
+            ext=self.FORMAT
+        )
+        first_page_writer = GroupsWriterToAutocadPage(
+            file_name=first_page_file_name,
+            page_lines_count=self.FIRST_PAGE_LINES_COUNT,
+            autocad_app=autocad_app,
+            template_name=self.FIRST_PAGE_TEMPLATE
+        )
         first_page_writer.write_groups(groups)
         file_path = first_page_writer.save_file()
         self.elements_list_files.append(file_path)
@@ -76,9 +83,11 @@ class GroupsWriterToAutocadFiles(object):
         page_number = 2
 
         while left_groups:
-            writer_page_file_name = "{name}_{page_number}.{ext}".format(name=self.ELEMENTS_LIST_PAGE_NAME,
-                                                                        page_number=page_number,
-                                                                        ext=self.FORMAT)
+            writer_page_file_name = "{name}_{page_number}.{ext}".format(
+                name=self.ELEMENTS_LIST_PAGE_NAME,
+                page_number=page_number,
+                ext=self.FORMAT)
+
             writer = GroupsWriterToAutocadPage(writer_page_file_name,
                                                self.OTHER_PAGE_LINES_COUNT, autocad_app,
                                                self.OTHER_PAGE_TEMPLATE)
@@ -148,31 +157,35 @@ class ElementsGroup(object):
             yield word
 
     def get_lines(self):
-        fields = [{
+        lines = [{
             "tag": "",
             "desc": "",
             "count": ""
         }]
+        first_element = self.elements[0]
+        second_element = self.elements[1]
+        last_element = self.elements[0]
+
         if len(self.elements) == 1:
-            fields[0]["tag"] = self.elements[0]["tag"]
-            fields[0]["count"] = str(1)
+            lines[0]["tag"] = first_element["tag"]
+            lines[0]["count"] = str(1)
         elif len(self.elements) == 2:
-            fields[0]["tag"] = self.elements[0]["tag"] + ", " + self.elements[1]["tag"]
-            fields[0]["count"] = str(2)
+            lines[0]["tag"] = first_element["tag"] + ", " + second_element["tag"]
+            lines[0]["count"] = str(2)
         elif len(self.elements) >= 3:
-            fields[0]["tag"] = self.elements[0]["tag"] + "-" + self.elements[-1]["tag"]
-            fields[0]["count"] = str(len(self.elements))
+            lines[0]["tag"] = first_element["tag"] + "-" + last_element["tag"]
+            lines[0]["count"] = str(len(self.elements))
 
         desc = self.elements[0]["description"] + " " + self.elements[0]["producer"]
         desc_list = desc.split()
 
         for word in self.word_iterator(desc_list):
-            if len(fields[-1]["desc"] + " " + word) > 53:
-                fields.append({"tag": "", "desc": " " + word, "count": ""})
+            if len(lines[-1]["desc"] + " " + word) > TABLE_DESCRIPTION_LETTER_COUNT:
+                lines.append({"tag": "", "desc": " " + word, "count": ""})
             else:
-                fields[-1]["desc"] = fields[-1]["desc"] + " " + word
+                lines[-1]["desc"] = lines[-1]["desc"] + " " + word
 
-        return fields
+        return lines
 
 
 def get_literals_from_tag(s):

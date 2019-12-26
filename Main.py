@@ -1,41 +1,31 @@
-import json
 from AutocadConnection import get_autocad_com_obj
 from ElementsGetter import ElementsGetter
 from CatalogInfoGetter import CatalogInfoGetter, CatalogInfoGetterFromSQLServer
 from ElementsWriter import ElementsListWriter
-
-SQL_SERVER_CONSTANT_SERVER = "TESTPC"
-SQL_SERVER_CONSTANT_DATABASE = "AutocadNIO1"
-SQL_SERVER_CONSTANT_UID = "sa"
-SQL_SERVER_CONSTANT_PASSWORD = "niiset"
+from Constants import SQL_SERVER_CONSTANT_SERVER, SQL_SERVER_CONSTANT_DATABASE, \
+    SQL_SERVER_CONSTANT_PASSWORD, SQL_SERVER_CONSTANT_UID
 
 autocad_app = get_autocad_com_obj()
-modelspace = autocad_app.ActiveDocument.ModelSpace
 
-sql_info_getter = CatalogInfoGetterFromSQLServer(SQL_SERVER_CONSTANT_SERVER, SQL_SERVER_CONSTANT_DATABASE,
-                                                 SQL_SERVER_CONSTANT_UID, SQL_SERVER_CONSTANT_PASSWORD)
+if autocad_app:
+    model_space = autocad_app.ActiveDocument.ModelSpace
 
-elements_without_desc = ElementsGetter(modelspace).elements
-elements = CatalogInfoGetter(elements_without_desc, sql_info_getter).elements
+    elements_getter = ElementsGetter(model_space=model_space)
+    elements_without_desc = elements_getter.elements
 
-# with open("data_file.json", "w") as f:
-#     json.dump(elements, f, indent=4)
+    sql_info_getter = CatalogInfoGetterFromSQLServer(
+        server=SQL_SERVER_CONSTANT_SERVER,
+        database=SQL_SERVER_CONSTANT_DATABASE,
+        uid=SQL_SERVER_CONSTANT_UID,
+        password=SQL_SERVER_CONSTANT_PASSWORD
+    )
 
-# with open("data_file.json", "r") as f:
-#     elements = json.load(f)
+    catalog_info_getter = CatalogInfoGetter(
+        elements_without_desc=elements_without_desc,
+        info_getter_type=sql_info_getter
+    )
 
-# for element in elements:
-#     print element
+    elements = catalog_info_getter.elements
 
-writer = ElementsListWriter()
-writer.write_elements(elements, autocad_app)
-
-
-
-
-
-
-
-
-
-
+    writer = ElementsListWriter()
+    writer.write_elements(elements=elements, autocad_app=autocad_app)

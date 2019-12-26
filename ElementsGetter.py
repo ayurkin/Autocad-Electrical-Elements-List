@@ -10,28 +10,39 @@ class EntityFromAutocadSheet(object):
     FAMILY_ADAPTER = {"RES": "RE"}
 
     def __init__(self, entity_from_autocad_sheet):
-        self.entity_attributes = {attribute.TagString: attribute.TextString
-                                  for attribute in com_object_itervalues(entity_from_autocad_sheet.GetAttributes())}
+        self.entity_attributes = {
+            attribute.TagString: attribute.TextString
+            for attribute in com_object_itervalues(
+                entity_from_autocad_sheet.GetAttributes()
+            )
+        }
         self.tag = self.entity_attributes.get("TAG1")
         self.producer = self.entity_attributes.get("MFG")
         self.catalog_number = self.entity_attributes.get("CAT")
-        self.family = self.FAMILY_ADAPTER.get(self.entity_attributes.get("FAMILY"),
-                                              self.entity_attributes.get("FAMILY"))
+
+        family = self.entity_attributes.get("FAMILY")
+        self.family = self.FAMILY_ADAPTER[family] if family in self.FAMILY_ADAPTER else family
 
     def __str__(self):
         return "tag: {tag}, producer: {producer}, catalog number: {catalog_number}, family: {family}".format(
-            tag=self.tag, producer=self.producer, catalog_number=self.catalog_number, family=self.family)
+            tag=self.tag,
+            producer=self.producer,
+            catalog_number=self.catalog_number,
+            family=self.family
+        )
 
 
 class EntityExporterFromModelSpace(object):
-    def __init__(self, modelspace):
-        self.modelspace = modelspace
+    def __init__(self, model_space):
+        self.model_space = model_space
         self.__entities = None
 
     def load_entities(self):
-        for entity_from_autocad_sheet in com_object_itervalues(self.modelspace):
+        for entity_from_autocad_sheet in com_object_itervalues(self.model_space):
             if self.is_entity_ok(entity_from_autocad_sheet):
-                self.__entities.append(EntityFromAutocadSheet(entity_from_autocad_sheet))
+                self.__entities.append(
+                    EntityFromAutocadSheet(entity_from_autocad_sheet)
+                )
 
     @property
     def entities(self):
@@ -40,7 +51,8 @@ class EntityExporterFromModelSpace(object):
             self.load_entities()
         return self.__entities
 
-    def is_entity_ok(self, entity_from_autocad_sheet):
+    @staticmethod
+    def is_entity_ok(entity_from_autocad_sheet):
         if not hasattr(entity_from_autocad_sheet, "name"):
             return False
         if not hasattr(entity_from_autocad_sheet, "getAttributes"):
@@ -57,23 +69,21 @@ class EntityExporterFromModelSpace(object):
 
 class ElementsGetter(object):
 
-    def __init__(self, modelspace):
+    def __init__(self, model_space):
         self.__elements = None
-        self.entity_exporter = EntityExporterFromModelSpace(modelspace)
+        self.entity_exporter = EntityExporterFromModelSpace(model_space)
 
     def load_elements(self):
-        entities = [{"tag": entity.tag, "producer": entity.producer, "catalog_number": entity.catalog_number,
-                     "family": entity.family, "description": "no description"} for entity in
-                    self.entity_exporter.entities if entity.tag is not None]
-        entities_without_catalog_number = [{"tag": entity.tag, "producer": entity.producer,
-                                            "catalog_number": entity.catalog_number,
-                                            "family": entity.family, "description": "no description"} for entity in
-                                           self.entity_exporter.entities
-                                           if entity.catalog_number is None]
-        # if entities_without_catalog_number:
-        #     raise Exception("There are elements without a catalog number:", [entity["tag"]
-        #                                                                      for entity in
-        #                                                                      entities_without_catalog_number])
+        entities = [
+            {
+                "tag": entity.tag,
+                "producer": entity.producer,
+                "catalog_number": entity.catalog_number,
+                "family": entity.family,
+                "description": "no description"
+            } for entity in self.entity_exporter.entities if entity.tag is not None
+        ]
+
         return entities
 
     @property

@@ -1,10 +1,6 @@
 import clr
-
 clr.AddReference("System.Data")
 from System.Data import SqlClient, DataSet
-
-
-# from System.Data.OleDb import OleDbConnection, OleDbDataAdapter
 
 
 class DBConnectionOpen:
@@ -22,23 +18,18 @@ class DBConnectionOpen:
 
 
 class CatalogInfoGetter(object):
-    def __init__(self, elements_without_desc, catalog_info_getter):
+    def __init__(self, elements_without_desc, info_getter_type):
         self.elements_without_desc = elements_without_desc
-        self.catalog_info_getter = catalog_info_getter
-        self.elements_with_desc = None
-
-    def get_elements_desc(self, elements_without_desc):
-        return self.catalog_info_getter.get_elements_info(elements_without_desc)
+        self.catalog_info_getter = info_getter_type
 
     @property
     def elements(self):
-        if self.elements_with_desc is None:
-            elements_desc = self.get_elements_desc(self.elements_without_desc)
-            elements_without_desc_copy = self.elements_without_desc[:]
-            for element in elements_without_desc_copy:
-                element["description"] = elements_desc[element["catalog_number"]]
-            self.elements_with_desc = elements_without_desc_copy
-        return self.elements_with_desc
+        elements_desc = self.catalog_info_getter.get_elements_info(self.elements_without_desc)
+
+        for element in self.elements_without_desc:
+            element["description"] = elements_desc[element["catalog_number"]]
+
+        return self.elements_without_desc
 
 
 class CatalogInfoGetterFromSQLServer(object):
@@ -53,10 +44,12 @@ class CatalogInfoGetterFromSQLServer(object):
 
     def connect_to_database(self):
         self.connection = SqlClient.SqlConnection(
-            r"server={server};database={database};uid={uid};password={password}".format(server=self.server,
-                                                                                        database=self.database,
-                                                                                        uid=self.uid,
-                                                                                        password=self.password))
+            r"server={server};database={database};uid={uid};password={password}".format(
+                server=self.server,
+                database=self.database,
+                uid=self.uid,
+                password=self.password)
+        )
 
     def get_queries(self, elements):
         queries = {}
@@ -65,17 +58,25 @@ class CatalogInfoGetterFromSQLServer(object):
                 queries[element['family']].add(element["catalog_number"])
             else:
                 queries[element["family"]] = {element["catalog_number"]}
+
         queries_strings = []
         for table, catalog_numbers in queries.iteritems():
-            query_end = " OR ".join([r"[CATALOG]={cat_num}".format(cat_num=cat_num) for cat_num in catalog_numbers])
+            query_end = " OR ".join(
+                [r"[CATALOG]={cat_num}".format(cat_num=cat_num) for cat_num in catalog_numbers]
+            )
+
             query = r"""SELECT [CATALOG], [DESCRIPTION] FROM [{database}].[dbo].[{table}]
-                        WHERE {query_end}""".format(database=self.database, table=table, query_end=query_end)
+                        WHERE {query_end}""".format(
+                database=self.database,
+                table=table,
+                query_end=query_end
+            )
             queries_strings.append(query)
         return queries_strings
 
     def get_elements_info(self, elements):
         queries = self.get_queries(elements)
-        catalog_info = dict()
+        catalog_info = {}
         for query in queries:
             adapter = SqlClient.SqlDataAdapter(query, self.connection)
             with DBConnectionOpen(self.connection):
