@@ -1,6 +1,7 @@
 from time import sleep
 from Constants import TABLE_ENTITY_NAME, TABLE_DESCRIPTION_LETTER_COUNT
 
+
 class GroupsWriterToAutocadPage(object):
     def __init__(self, file_name, page_lines_count, autocad_app, template_name):
         self.file_name = file_name
@@ -66,8 +67,10 @@ class GroupsWriterToAutocadFiles(object):
         self.elements_list_files = []
 
     def write_groups(self, groups, autocad_app):
-        first_page_file_name = "{name}_1.{ext}".format(
+        page_number = 1
+        first_page_file_name = "{name}_{page_number}.{ext}".format(
             name=self.ELEMENTS_LIST_PAGE_NAME,
+            page_number=page_number,
             ext=self.FORMAT
         )
         first_page_writer = GroupsWriterToAutocadPage(
@@ -86,7 +89,8 @@ class GroupsWriterToAutocadFiles(object):
             writer_page_file_name = "{name}_{page_number}.{ext}".format(
                 name=self.ELEMENTS_LIST_PAGE_NAME,
                 page_number=page_number,
-                ext=self.FORMAT)
+                ext=self.FORMAT
+            )
 
             writer = GroupsWriterToAutocadPage(writer_page_file_name,
                                                self.OTHER_PAGE_LINES_COUNT, autocad_app,
@@ -107,7 +111,8 @@ class ElementsListWriter(object):
         self.groups_writer = self.GROUPS_WRITER()
         self.elements_list_files = []
 
-    def get_sorted_by_tag(self, elements):
+    @staticmethod
+    def get_sorted_by_tag(elements):
         s = sorted(elements, key=lambda elem: elem['tag'])
         groups = [[s.pop(0)]]
         for element in s:
@@ -119,7 +124,8 @@ class ElementsListWriter(object):
         groups = [sorted(group, key=lambda el: get_digits_from_tag(el['tag'])) for group in groups]
         return sum(groups, [])
 
-    def get_groups(self, elements):
+    @staticmethod
+    def get_groups(elements):
         groups = [ElementsGroup([elements.pop(0)])]
         for element in elements:
             if groups[-1].can_be_added(element):
@@ -152,7 +158,8 @@ class ElementsGroup(object):
     def add_element(self, element):
         self.elements.append(element)
 
-    def word_iterator(self, words_list):
+    @staticmethod
+    def word_iterator(words_list):
         for word in words_list:
             yield word
 
@@ -165,18 +172,19 @@ class ElementsGroup(object):
         first_element = self.elements[0]
         second_element = self.elements[1]
         last_element = self.elements[0]
+        count = len(self.elements)
 
         if len(self.elements) == 1:
-            lines[0]["tag"] = first_element["tag"]
-            lines[0]["count"] = str(1)
+            tag = first_element["tag"]
         elif len(self.elements) == 2:
-            lines[0]["tag"] = first_element["tag"] + ", " + second_element["tag"]
-            lines[0]["count"] = str(2)
+            tag = first_element["tag"] + ", " + second_element["tag"]
         elif len(self.elements) >= 3:
-            lines[0]["tag"] = first_element["tag"] + "-" + last_element["tag"]
-            lines[0]["count"] = str(len(self.elements))
+            tag = first_element["tag"] + "-" + last_element["tag"]
 
-        desc = self.elements[0]["description"] + " " + self.elements[0]["producer"]
+        lines[0]["tag"] = tag
+        lines[0]["count"] = str(count)
+
+        desc = first_element["description"] + " " + first_element["producer"]
         desc_list = desc.split()
 
         for word in self.word_iterator(desc_list):
