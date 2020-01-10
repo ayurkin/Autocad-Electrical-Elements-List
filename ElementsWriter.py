@@ -1,5 +1,5 @@
 from time import sleep
-from Constants import TABLE_ENTITY_NAME, TABLE_DESCRIPTION_LETTER_COUNT
+from Constants import TABLE_ENTITY_NAME, TABLE_DESCRIPTION_LETTER_COUNT, TABLE_TAG_LETTER_COUNT
 
 
 class GroupsWriterToAutocadPage(object):
@@ -11,7 +11,8 @@ class GroupsWriterToAutocadPage(object):
         self.__file = self.create_file(self.template_name, self.autocad_app)
         self.__left_groups = None
 
-    def create_file(self, template_name, autocad_app):
+    @staticmethod
+    def create_file(template_name, autocad_app):
         return autocad_app.Documents.Add(template_name)
 
     def save_file(self):
@@ -92,9 +93,12 @@ class GroupsWriterToAutocadFiles(object):
                 ext=self.FORMAT
             )
 
-            writer = GroupsWriterToAutocadPage(writer_page_file_name,
-                                               self.OTHER_PAGE_LINES_COUNT, autocad_app,
-                                               self.OTHER_PAGE_TEMPLATE)
+            writer = GroupsWriterToAutocadPage(
+                file_name=writer_page_file_name,
+                page_lines_count=self.OTHER_PAGE_LINES_COUNT,
+                autocad_app=autocad_app,
+                template_name=self.OTHER_PAGE_TEMPLATE
+            )
             page_number += 1
             writer.write_groups(left_groups)
             left_groups = writer.get_left_groups()
@@ -170,19 +174,9 @@ class ElementsGroup(object):
             "count": ""
         }]
         first_element = self.elements[0]
-        second_element = self.elements[1]
-        last_element = self.elements[0]
-        count = len(self.elements)
+        last_element = self.elements[-1]
 
-        if len(self.elements) == 1:
-            tag = first_element["tag"]
-        elif len(self.elements) == 2:
-            tag = first_element["tag"] + ", " + second_element["tag"]
-        elif len(self.elements) >= 3:
-            tag = first_element["tag"] + "-" + last_element["tag"]
-
-        lines[0]["tag"] = tag
-        lines[0]["count"] = str(count)
+        lines[0]["count"] = str(len(self.elements))
 
         desc = first_element["description"] + " " + first_element["producer"]
         desc_list = desc.split()
@@ -192,6 +186,32 @@ class ElementsGroup(object):
                 lines.append({"tag": "", "desc": " " + word, "count": ""})
             else:
                 lines[-1]["desc"] = lines[-1]["desc"] + " " + word
+
+        if len(self.elements) == 1:
+            lines[0]['tag'] = first_element['tag']
+        elif len(self.elements) == 2:
+            second_element = self.elements[1]
+            if len(first_element['tag'] + second_element['tag']) > TABLE_TAG_LETTER_COUNT:
+                if len(lines) > 1:
+                    lines[0]['tag'] = first_element['tag'] + ","
+                    lines[1]['tag'] = second_element['tag']
+                else:
+                    lines.append({"tag": "", "desc": "", "count": ""})
+                    lines[0]['tag'] = first_element['tag'] + ","
+                    lines[1]['tag'] = second_element['tag']
+            else:
+                lines[0]['tag'] = first_element['tag'] + "," + second_element['tag']
+        elif len(self.elements) >= 3:
+            if len(first_element['tag'] + last_element['tag']) > TABLE_TAG_LETTER_COUNT:
+                if len(lines) > 1:
+                    lines[0]['tag'] = first_element['tag'] + "-"
+                    lines[1]['tag'] = last_element['tag']
+                else:
+                    lines.append({"tag": "", "desc": "", "count": ""})
+                    lines[0]['tag'] = first_element['tag'] + "-"
+                    lines[1]['tag'] = last_element['tag']
+            else:
+                lines[0]['tag'] = first_element['tag'] + "-" + last_element['tag']
 
         return lines
 

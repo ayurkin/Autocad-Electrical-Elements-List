@@ -1,11 +1,11 @@
 import System
-from Constants import AUTOCADS
+from Constants import AUTOCADS_CONNECTION_LINE
 
 
 def get_autocad_com_obj():
-    for autocad_name, autocad_connect_line in AUTOCADS.items():
+    for autocad_name, autocad_connection_line in AUTOCADS_CONNECTION_LINE.items():
         try:
-            autocad_com_obj = System.Runtime.InteropServices.Marshal.GetActiveObject(autocad_connect_line)
+            autocad_com_obj = System.Runtime.InteropServices.Marshal.GetActiveObject(autocad_connection_line)
         except EnvironmentError:
             pass
         else:
